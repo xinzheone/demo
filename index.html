@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>评论动态加载</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="jquery.js"></script>
+    <script type="text/javascript">
+        
+    $(function(){
+         var l =0;
+          function initList(aa){
+            $.ajax({
+                type:'get',
+                url:'http://coral.qq.com/article/1983169624/comment',
+                data:aa,
+                jsonp:'callback',
+                dataType:'jsonp',
+                jsonpCallback :'mainComment',
+                reqnum :20,
+                success:function(data){
+                    // console.log(data.data.commentid)
+                    // console.log(reqnum)
+                    var tag = '';
+                    var c = data.data.commentid;
+                    // var len = c.length;
+                    
+                    var stp = 20;
+                    if( l<3){
+                       
+                        for( var i = l ;i<10+l*stp;i++){
+        
+                            tag +=  '<li class="comment">'
+                                    +'<div class="left"><img src="'+c[i].userinfo.head+'"></div>'
+                                    +'<div class="right">'
+                                    +'    <div><span>'+c[i].userinfo.nick+'</span>: <span>'+c[i].timeDifference+'</span> </div>'
+                                    +'    <div>'+c[i].content+'</div>'
+                                    +'</div>'
+                                    +'</li>'
+                                    +'<hr>'
+                            
+                        }
+                        l++;
+                     }
+                         $('#contentList').append(tag);
+
+                    var num = parseInt($('#last').val()) + 1;
+                    $('#last').val(num);
+                }
+            })
+         };
+          initList({
+                last:$('#last').val(),
+       
+             })
+         $('#more').click(function(){
+           if(l<3){
+             
+             initList({
+                last:$('#last').val(),
+       
+             })
+           }else{
+             $('#more').text("没有更多了")
+           }
+         })
+    })
+    </script>
+</head>
+<body>
+<div style="height:300px;"></div>
+<div id="container">
+<ul id="contentList">
+   <!--  <li class="comment">
+        <div class="left"><img src="./g1.jpg"></div>
+        <div class="right">
+            <div><span>传智雷老师</span>: <span>昨天 19:08:33</span> </div>
+            <div>上述知情人士透露，目前业内一些公司准备了专门的名单从电信运营商定向挖人，其筹码是数倍于运营商的薪酬、股权激励以及企业运营决策的自主权。</div>
+        </div>
+    </li>
+    <hr>
+    <li class="comment">
+        <div class="left"><img src="./g1.jpg"></div>
+        <div class="right">
+            <div><span></span>: <span>昨天 19:08:33</span> </div>
+            <div>上述知情人士透露，目前业内一些公司准备了专门的名单从电信运营商定向挖人，其筹码是数倍于运营商的薪酬、股权激励以及企业运营决策的自主权。</div>
+        </div>
+    </li>
+    <hr> -->
+
+</ul>
+<div id="more">加载更多...</div>
+<input type="hidden" id="last" value="0">
+</div>
+</body>
+</html>
